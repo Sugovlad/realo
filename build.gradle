@@ -1,0 +1,47 @@
+group = 'com.realo'
+version = '0.0.1'
+
+def repos = [
+        "discovery": "https://github.com/Sugovlad/discovery.git",
+        "gateway": "https://github.com/Sugovlad/gateway.git",
+        "ui": "https://github.com/Sugovlad/ui.git",
+        "admin-service": "https://github.com/Sugovlad/admin-service.git"
+]
+
+def cloneDir = "${projectDir}"
+
+task cloneOrUpdateRepos {
+    doLast {
+        file(cloneDir).mkdirs()
+
+        repos.each { folderName, repoUrl ->
+            def destDir = "${cloneDir}/${folderName}"
+
+            if (file(destDir).exists()) {
+                def output = exec {
+                    commandLine 'git', '-C', destDir, 'fetch', '--dry-run'
+                    standardOutput = new ByteArrayOutputStream()
+                }.standardOutput.toString()
+
+                if (output.trim()) {
+                    println "Updating ${folderName}..."
+                    exec {
+                        commandLine 'git', '-C', destDir, 'pull'
+                    }
+                } else {
+                    println "No updates found for ${folderName}."
+                }
+            } else {
+                println "Cloning ${folderName}..."
+                exec {
+                    commandLine 'git', 'clone', repoUrl, destDir
+                }
+            }
+        }
+    }
+}
+
+
+task customBuild {
+    dependsOn cloneOrUpdateRepos
+}

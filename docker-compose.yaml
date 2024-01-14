@@ -1,0 +1,85 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.2.0
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: 'realo'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'user1111'
+      MYSQL_ROOT_PASSWORD: 'rootpassword'
+    ports:
+      - "3333:3306"
+    networks:
+      - realo-network
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+
+  admin-service:
+    build:
+      context: ./adminservice
+      dockerfile: Dockerfile
+    container_name: admin
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka
+      - DB_CONNECTION_URI=r2dbc:mysql://mysql:3306/realo?serverTimezone=UTC
+      - DB_USER=user
+      - DB_PASSWORD=user1111
+      - SERVER_PORT=8083
+    depends_on:
+      - discovery
+      - mysql
+    networks:
+      - realo-network
+
+  discovery:
+    build:
+      context: ./discovery
+      dockerfile: Dockerfile
+    container_name: discovery
+    environment:
+      - DISCOVERY_SERVER_PORT=8761
+    ports:
+      - "8761:8761" # for debug/monitoring purpose
+    networks:
+      - realo-network
+
+  ui:
+    build:
+      context: ./ui
+      args:
+        REACT_APP_API_URL: http://gateway:8080
+      dockerfile: Dockerfile
+    container_name: ui
+    ports:
+      - "8085:80"
+    networks:
+      - realo-network
+
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: gateway
+    ports:
+      - "8089:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka
+      - UI_URI=http://ui:80
+    depends_on:
+      - discovery
+      - admin-service
+      - ui
+    networks:
+      - realo-network
+
+volumes:
+  mysql_data:
+
+networks:
+  realo-network:
+    driver: bridge
