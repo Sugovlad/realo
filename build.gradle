@@ -5,7 +5,8 @@ def repos = [
         "discovery": "https://github.com/Sugovlad/discovery.git",
         "gateway": "https://github.com/Sugovlad/gateway.git",
         "ui": "https://github.com/Sugovlad/ui.git",
-        "admin-service": "https://github.com/Sugovlad/admin-service.git"
+        "admin-service": "https://github.com/Sugovlad/admin-service.git",
+        "api-service": "https://github.com/Sugovlad/api-service.git"
 ]
 
 def cloneDir = "${projectDir}"
@@ -18,12 +19,14 @@ task cloneOrUpdateRepos {
             def destDir = "${cloneDir}/${folderName}"
 
             if (file(destDir).exists()) {
-                def output = exec {
-                    commandLine 'git', '-C', destDir, 'fetch', '--dry-run'
-                    standardOutput = new ByteArrayOutputStream()
-                }.standardOutput.toString()
+                ByteArrayOutputStream output = new ByteArrayOutputStream()
 
-                if (output.trim()) {
+                exec {
+                    commandLine 'git', '-C', destDir, 'fetch', '--dry-run'
+                    standardOutput = output
+                }
+
+                if (output.toString().trim()) {
                     println "Updating ${folderName}..."
                     exec {
                         commandLine 'git', '-C', destDir, 'pull'
