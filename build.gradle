@@ -1,4 +1,4 @@
-group = 'com.realo'
+    group = 'com.realo'
 version = '0.0.1'
 
 def repos = [

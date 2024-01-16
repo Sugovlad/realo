@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     container_name: admin
     environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:${DISCOVERY_SERVER_PORT}}/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:${DISCOVERY_SERVER_PORT}/eureka
       - DB_CONNECTION_URI=${DB_CONNECTION_URI}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
@@ -39,10 +39,10 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:${DISCOVERY_SERVER_PORT}/eureka
       - SERVER_PORT=${API_SERVICE_SERVER_PORT}
+      - ADMIN-SERVICE=admin-service
     depends_on:
       - discovery
       - admin-service
-      - mysql
     networks:
       - realo-network
 
@@ -56,17 +56,6 @@ services:
     networks:
       - realo-network
 
-  ui:
-    build:
-      context: ./ui
-      args:
-        REACT_APP_API_URL: http://gateway:${GATEWAY_SERVER_PORT}
-      dockerfile: Dockerfile
-    container_name: ui
-    networks:
-      - realo-network
-
-
   gateway:
     build:
       context: ./gateway
@@ -77,11 +66,20 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:${DISCOVERY_SERVER_PORT}/eureka
       - UI_URI=http://ui:80
+      - GATEWAY_SERVER_PORT=${GATEWAY_SERVER_PORT}
     depends_on:
       - discovery
-      - admin-service
-      - api-service
       - ui
+    networks:
+      - realo-network
+
+  ui:
+    build:
+      context: ./ui
+      args:
+        REACT_APP_API_URL: http://localhost:${GATEWAY_SERVER_PORT}
+      dockerfile: Dockerfile
+    container_name: ui
     networks:
       - realo-network
 
