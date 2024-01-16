@@ -3,11 +3,11 @@
 ## Requirements
 
 Should be installed
-Docker
-Gradle
-Git
-npm
-node 16
+- Docker
+- Gradle
+- Git
+- npm
+- node 16
 
 ## Fetching and setup project
 
