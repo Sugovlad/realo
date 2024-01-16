@@ -10,22 +10,14 @@ Should be installed
 - node 16
 
 ## Fetching and setup project
-
-To fetch all projects you need to clone base repo https://github.com/Sugovlad/realo.git
-After that you need to run gradle it will fetch all services in appropriate folder. Services should be on the same level
-and inside realo project.
-To run projects run docker compose up
+To fetch all projects, clone the base repository from [https://github.com/Sugovlad/realo.git]. After cloning, run Gradle, which will fetch all services into the appropriate folder. Ensure that the services are on the same level and inside the ReaLo project. To run the projects, execute docker-compose up.
 
 ## Services
 
 ## Foreword
+The services do not have any security level. All containers, except the gateway, are running on a local network and cannot be accessed from the outside. No hash function is used for passwords, and they are saved as is, since no security setup is implemented.
 
-Services doesn't have any security level.
-All containers except gateway running in local network and can't be accessed from the outside. No hash function used for
-password, and it save as it is since no security is set up
-
-Allowed all cors polices and just skipped. As Db used mysql. Ui is written in react-js. For java services used java 17
-and spring boot 3.2.1.
+All CORS policies are allowed and just skipped. MySQL is used as the database. The UI is written in React.js. For Java services, Java 17 and Spring Boot 3.2.1 are used.
 
 ### Admin Service
 
@@ -58,10 +50,10 @@ Admin service has 2 profiles.
 
 ### UI
 
-Configured for running locally and in container.
-Ui has 2 tabs. First tabs contains project list. You can create/delete project. You can assign user created in second
-tab to projects.
-Second tab contains user list. You can create/delete project.
+Configured for running both locally and in a container. The UI has 2 tabs:
+
+The first tab contains a project list. You can create/delete projects and assign users created in the second tab to these projects.
+The second tab contains a user list. You can create/delete users.
 
 ## API url
 
