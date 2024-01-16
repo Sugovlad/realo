@@ -59,13 +59,13 @@ The second tab contains a user list. You can create/delete users.
 
 ### User
 
-- Get: /admin/user/
-- Get: /admin/user/${id}
-- Post: /admin/user/
+- Get: /api/user/
+- Get: /api/user/${id}
+- Post: /api/user/
     - payload User:object
-- Put: /admin/user/
+- Put: /api/user/
     - payload User:object
-- Delete: /admin/user/${id}
+- Delete: /api/user/${id}
 
 ```
 {
@@ -78,15 +78,15 @@ The second tab contains a user list. You can create/delete users.
 
 ### Project
 
-- Get: /admin/project
-- Get: /admin/project/${id}
-- Post: /admin/project/
+- Get: /api/project
+- Get: /api/project/${id}
+- Post: /api/project/
     - payload Project:object
-- Put: /admin/project/
+- Put: /api/project/
     - payload Project:object
-- Put /admin/project/${projectid}/add-user/${userid}
-- Put /admin/project/${projectid}/remove-user/${userid}
-- Delete: /admin/project/${id}
+- Put /api/project/${projectid}/add-user/${userid}
+- Put /api/project/${projectid}/remove-user/${userid}
+- Delete: /api/project/${id}
 
 
 ``` 
