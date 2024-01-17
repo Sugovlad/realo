@@ -55,7 +55,7 @@ Configured for running both locally and in a container. The UI has 2 tabs:
 The first tab contains a project list. You can create/delete projects and assign users created in the second tab to these projects.
 The second tab contains a user list. You can create/delete users.
 
-## API url
+## API
 
 ### User
 
