@@ -1,4 +1,4 @@
-# ReaLo test task
+# ReaLo
 
 ## Requirements
 
